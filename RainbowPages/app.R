@@ -4,6 +4,7 @@ library(magrittr)
 library(leaflet)
 
 source("sheet.R")
+source("data_manip.R")
 curated <- curated
 
 
