@@ -19,7 +19,8 @@ ui <- navbarPage("Rainbow Pages Cape Town",
                  tabPanel("Network"), 
                  tabPanel("Resources"),
                  tabPanel("Support"),
-                 tabPanel("Suggestions")
+                 tabPanel("Suggestions"),
+                 fluid=T
 )
     
   
@@ -28,21 +29,22 @@ ui <- navbarPage("Rainbow Pages Cape Town",
 server <- function(input, output) {
     output$busi <- DT::renderDataTable({
         datatable(busi, 
-                  options=list(columnDefs = list(list(visible=FALSE, targets=c(6,10))))) %>%
-            formatStyle('colours',
-                        target = 'row',
-                        backgroundColor = styleEqual(c(1:8), hex)) 
+                  options=list(columnDefs = list(list(visible=FALSE, targets=c(6,10))), pageLength = 1000)
+                  ) %>%
+        formatStyle('colours',
+                    target = 'row',
+                    backgroundColor = styleEqual(c(1:8), hex)) 
         })
     output$orgs <- DT::renderDataTable({
          datatable(orgs, 
-                   options=list(columnDefs = list(list(visible=FALSE, targets=c(6,10))))) %>%
+                   options=list(columnDefs = list(list(visible=FALSE, targets=c(6,10))), pageLength = 1000)) %>%
             formatStyle('colours',
                         target = 'row',
                         backgroundColor = styleEqual(c(1:8), hex)) 
         })
     output$indiv <- DT::renderDataTable({
         datatable(indiv, 
-                  options=list(columnDefs = list(list(visible=FALSE, targets=c(6,9))))) %>%
+                  options=list(columnDefs = list(list(visible=FALSE, targets=c(6,9))), pageLength = 1000)) %>%
             formatStyle('colours',
                         target = 'row',
                         backgroundColor = styleEqual(c(1:8), hex)) 
@@ -53,6 +55,7 @@ server <- function(input, output) {
         setView(lng = 18.495678, lat = -33.939157, zoom = 12) %>%
         addMarkers(lng = ~lon, lat = ~lat, popup = ~as.character(label), clusterOptions = markerClusterOptions())
         })
+    
 }
 
 # Run the application 
