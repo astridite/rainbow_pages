@@ -15,7 +15,8 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                             fluidRow(column(
                               tags$br(),
                               tags$br(),
-                              tags$p(sample_text, sample_text, align="justify"),
+                              tags$p(welcome_para1, align="justify"),
+                              tags$p(welcome_para2, align="justify"),
                               width=6, offset=6)))), 
                  tabPanel("Businesses", icon=icon("briefcase"), 
                           fluidPage(

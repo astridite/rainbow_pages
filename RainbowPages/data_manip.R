@@ -98,3 +98,5 @@ hex <- c("#FF6663", "#FEB144", "#FDFD97", "#9EE09E", "#9EC1CF", "#995bc7", "#CC9
 
 sample_text <- "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 welcome_text <- "Hi! Welcome to the RainbowPages, a repository of all things openly and enthusiastically LGBTQIA+ in Cape Town, South Africa!"
+welcome_para1 <- "RainbowPages is a repository of businesses, organisations and individuals in Cape Town created to highlight and center the activities, connections and needs of people in the LGBTQIA+ community in our city."
+welcome_para2 <- "This is a passion project and relies on the input of volunteers. If you would like to contribute your time and skill, please get in touch!"
