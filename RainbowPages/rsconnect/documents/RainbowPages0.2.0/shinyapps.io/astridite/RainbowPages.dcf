@@ -1,0 +1,12 @@
+name: RainbowPages
+title: RainbowPages
+username:
+account: astridite
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2776601
+bundleId: 3611256
+url: https://astridite.shinyapps.io/RainbowPages/
+when: 1599663892.3255
+asMultiple: FALSE
+asStatic: FALSE
