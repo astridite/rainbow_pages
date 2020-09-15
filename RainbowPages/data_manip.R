@@ -28,21 +28,23 @@ indiv <- curated %>%
   mutate(colours = rep_len(1:8, length.out = (nrow(.)))) 
 
 # Only add marker locations where we have an actual address
-locations <- curated %>%
-  filter(!is.na(address)) %>%
-  select(address)
+locations <- responses %>% 
+  row_to_names(1) %>%
+  filter(!is.na(address_marker)) %>%
+  select(address_marker, layer, id)
 
 # Geocode addresses
 coords <- map_dfr(locations, geocode_OSM)
 
 # Create a dataframe of marker coordinates and labels
 markers <- curated %>%
-  inner_join(coords, by = c('address' = 'query')) %>%
+  inner_join(locations, by = 'id') %>%
+  inner_join(coords, by = c('address_marker' = 'query')) %>%
   mutate(label = paste(sep = "<br/>",
                        sprintf("<b>%s</b>", id),
                        business,
                        address)) %>%
-  select(lat, lon, label)
+  select(lat, lon, label, layer) 
 
 hex <- c("#FF6663", "#FEB144", "#FDFD97", "#9EE09E", "#9EC1CF", "#995bc7", "#CC99C9", "#935218")
 
