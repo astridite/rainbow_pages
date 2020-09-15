@@ -2,9 +2,16 @@ library(tmaptools)
 
 curated <- responses %>% 
   row_to_names(1) %>% 
-  select(id, contact_person, email, social_media, business, individual, 
-         organisation, class, address, location, sector) %>% 
-  arrange(id) 
+  select(id, contact_person, email, website, business, individual, 
+         organisation, class, address, location, sector,
+         twitter, instagram, facebook, linkedin) %>% 
+  arrange(id) %>% 
+  rowwise() %>% 
+  mutate(social_media = paste(ifelse(is.na(facebook), "", paste("Facebook: ", facebook, " ")),
+                              ifelse(is.na(instagram), "", paste("Instagram: ", instagram, " ")),
+                              ifelse(is.na(twitter), "", paste("Twitter: ", twitter, " ")),
+                              ifelse(is.na(linkedin), "", paste("Linkedin: ", linkedin, " "))))
+                              
 
 busi <- curated %>% 
   filter(class=="A business") %>% 
@@ -24,6 +31,7 @@ orgs <- curated %>%
 
 indiv <- curated %>% 
   filter(class=="An individual") %>% 
+  mutate(address=NA) %>% 
   select(-business, -organisation, -address) %>% 
   rename(detail = 'individual') %>% 
   rename(individual='id') %>% 
