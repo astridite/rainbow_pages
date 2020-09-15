@@ -6,20 +6,7 @@
 library(leaflet)
 library(here)
 
-# rainbow_icons <- icons(
-#   iconUrl = case_when(
-#     markers$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
-#     markers$layer == "Community" ~ here("icons/community.png"),
-#     markers$layer == "Information Technology" ~ here("icons/computers.png"),
-#     markers$layer == "Food" ~ here("icons/food.png"),
-#     markers$layer == "Health" ~ here("icons/health-medical.png"),
-#     markers$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
-#     markers$layer == "Financial Services" ~ here("icons/finance.png")
-#   ),
-#   iconWidth = 26.4, iconHeight = 35.2,
-#   iconAnchorX = 13.2, iconAnchorY = 35
-# )
-
+# Create icons for markers
 arts_icon <- makeIcon(iconUrl = here("icons/nightlife.png"),
                       iconWidth = 26.4, iconHeight = 35.2,
                       iconAnchorX = 13.2, iconAnchorY = 35)
@@ -48,10 +35,12 @@ finance_icon <- makeIcon(iconUrl = here("icons/finance.png"),
                         iconWidth = 26.4, iconHeight = 35.2,
                         iconAnchorX = 13.2, iconAnchorY = 35)
 
+# Create map and set initial view
 map <- leaflet() %>% 
   addTiles() %>% 
   setView(lng = 18.495678, lat = -33.939157, zoom = 12) 
 
+# Add markers to map
 map <- map %>%
   addMarkers(
     data = markers[markers$layer == "Arts & Entertainment", ],
@@ -117,6 +106,7 @@ map <- map %>%
     clusterOptions = markerClusterOptions()
   ) 
 
+# Add layers control
 map <- map %>%
   addLayersControl(
     overlayGroups = markers$layer,
@@ -124,6 +114,20 @@ map <- map %>%
   ) 
 
 map
+
+# rainbow_icons <- icons(
+#   iconUrl = case_when(
+#     markers$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
+#     markers$layer == "Community" ~ here("icons/community.png"),
+#     markers$layer == "Information Technology" ~ here("icons/computers.png"),
+#     markers$layer == "Food" ~ here("icons/food.png"),
+#     markers$layer == "Health" ~ here("icons/health-medical.png"),
+#     markers$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
+#     markers$layer == "Financial Services" ~ here("icons/finance.png")
+#   ),
+#   iconWidth = 26.4, iconHeight = 35.2,
+#   iconAnchorX = 13.2, iconAnchorY = 35
+# )
 
 # markers.df <- split(markers, markers$layer)
 # 
