@@ -1,10 +1,10 @@
 library(shiny)
 library(DT)
 library(magrittr)
-library(leaflet)
 
 source("sheet.R")
 source("data_manip.R")
+source("map.R")
 curated <- curated
 
 
@@ -49,12 +49,7 @@ server <- function(input, output) {
                         target = 'row',
                         backgroundColor = styleEqual(c(1:8), hex)) 
         })
-    output$map <- renderLeaflet({
-        leaflet(data = markers) %>%
-        addTiles() %>%
-        setView(lng = 18.495678, lat = -33.939157, zoom = 12) %>%
-        addMarkers(lng = ~lon, lat = ~lat, popup = ~as.character(label), clusterOptions = markerClusterOptions())
-        })
+    output$map <- renderLeaflet({map})
     
 }
 
