@@ -13,31 +13,23 @@ curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridit
 
 ui <-  fluidPage(theme=shinytheme("yeti"),
   navbarPage("Rainbow Pages Cape Town",
-                 # tabPanel("Welcome!", icon=icon("heart"),
-                 #          fluidPage(
-                 #            fluidRow(column(
-                 #              tags$h2(welcome_text), width = 12)),
-                 #            fluidRow(column(
-                 #              tags$br(),
-                 #              tags$br(),
-                 #              tags$h4(welcome_para1, align="justify"),
-                 #              tags$p("If you would like to see yourself or your business/organisation listed here, please fill out ",
-                 #                tags$a(href="https://docs.google.com/forms/d/1Ot4rNE-hQilKH7DTdWoMvTYTh5BX1__uoBhdpm91ZwU/edit", "this form.")),
-                 #              tags$p(welcome_para2, align="justify"),
-                 #              width=6)))),
-                 tabPanel("Browse",
+             tabPanel("Browse",
+                          icon=icon("heart"),
                           fluidPage(
                             fluidRow(column(
                               tags$h2(welcome_text), 
                               tags$br(),
+                              tags$h4(welcome_para1, align="justify"),
                               tags$br(),
-                              width = 12)
+                              width = 8,
+                              offset = 3)
                               ),
                             sidebarLayout(
                               sidebarPanel(
                                 tags$br(),
                                 style=HTML("background-color: #ffffff;", 
-                                           "border-color: #ffffff;"),
+                                           "border-color: #ffffff;",
+                                           "box-shadow: none;"),
                                 checkboxGroupInput('type', 
                                                    label=tags$h4("Filter by Type"),
                                                    selected=levels(factor(curated_data$class)),
@@ -63,7 +55,16 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                  # tabPanel("Network", icon=icon("draw-polygon"),
                  #          fluidPage(
                  #            fluidRow(column(tags$h3(work_in_progress), width=12)))),
-                 tabPanel("Resources", icon=icon("info-circle"), 
+             tabPanel("Sign-Up", icon=icon("user-plus"),
+                      fluidPage(column(
+                        tags$h3(signup_text1),
+                        tags$h5(signup_text2),
+                        tags$br(),
+                        tags$iframe(src="https://docs.google.com/forms/d/e/1FAIpQLSfp7dzCI7Pjh5H8RMEWvfh4_ba2ZbNoFSLfyuJlU6v4W4-nxg/viewform?usp=sf_link", width=1000, height=500),
+                        width=10, offset=1))
+                      ), 
+             
+             tabPanel("Resources", icon=icon("info-circle"), 
                           fluidPage(
                             fluidRow(column(tags$h3(resources_text1,
                                                     tags$a(href="https://www.sahistory.org.za/archive/life-orientation-classroom-sexuality-and-gender-pack?fbclid=IwAR3Thjx83Q4y4ntDa-78zPp-SFHuXKf_4uoMY55c1cLTRrwgp5DfYq36jUs",
@@ -71,12 +72,16 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                                     column(tags$h3(resources_text2,
                                                     tags$a(href="https://github.com/astridite/rainbow_pages",
                                                            "Check out our Github Repo."), align='right'), width=8, offset=4)))),
-                 tabPanel("Support", icon=icon("hand-holding-usd"),
-                          fluidPage(
-                            fluidRow(column(tags$h3(work_in_progress), width=12)))),
+                 # tabPanel("Support", icon=icon("hand-holding-usd"),
+                 #          fluidPage(
+                 #            fluidRow(column(tags$h3(work_in_progress), width=12)))),
                  tabPanel("Suggestions", icon=icon("envelope-open-text"),
-                          fluidPage(
-                            fluidRow(column(tags$h3(work_in_progress), width=12))))),
+                          fluidPage(column(
+                            tags$h3(suggestion_text1),
+                            tags$br(),
+                            tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=1000, height=500),
+                            width=10, offset=1))
+                 )),
   
   tags$style(HTML("a {color: #eb34c0}"))
 )

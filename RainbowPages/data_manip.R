@@ -28,26 +28,7 @@ library(tmaptools)
 #          organisation, class, address, location, sector) %>% 
 #   arrange(id) 
 # 
-# busi <- curated %>% 
-#   filter(class=="A business") %>% 
-#   select(-organisation, -individual) %>% 
-#   rename(detail = 'business') %>% 
-#   rename(business='id') %>% 
-#   mutate(colours = rep_len(1:8, length.out = (nrow(.))))
-# 
-# orgs <- curated %>% 
-#   filter(class=="A NGO/NPO/Community Organisation") %>% 
-#   select(-business, -individual) %>% 
-#   rename(detail = 'organisation') %>% 
-#   rename(organisation='id') %>% 
-#   mutate(colours = rep_len(1:8, length.out = (nrow(.))))
-# 
-# indiv <- curated %>% 
-#   filter(class=="An individual") %>% 
-#   select(-business, -organisation, -address) %>% 
-#   rename(detail = 'individual') %>% 
-#   rename(individual='id') %>% 
-#   mutate(colours = rep_len(1:8, length.out = (nrow(.)))) 
+ 
 # 
 # # Only add marker locations where we have an actual address
 # locations <- curated %>%
@@ -85,4 +66,9 @@ map_text1 <- "Explore LGBTQIA+ activities in the city:"
 work_in_progress <- "Rome was not built in a day, hunty. Check back in a few!"
 
 resources_text1 <- "Want some more information about the LGBTQIA+ experience in South Africa?"
-resources_text2 <- "Want to check out how this app was built using R Shiny?" 
+resources_text2 <- "Want to check out how this app was built using R Shiny?"
+
+signup_text1 <- "Want to see yourself in the RainbowPages? Sign up here:"
+signup_text2 <- "Responses will be added to the app in a few days."
+
+suggestion_text1 <- "We want to hear from you:"
