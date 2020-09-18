@@ -61,9 +61,11 @@ markers <- curated %>%
                        sprintf("<b>%s</b>", id),
                        entity, 
                        address)) %>%
-  select(lat, lon, label, layer)
+  select(id, lat, lon, label)
 
-
+# Add marker data to curated dataframe
+curated <- curated %>%
+  full_join(markers, by = 'id')
 
 write.csv(curated, "curated_data.csv", row.names = F)
 write.csv(markers, "markers.csv", row.names = F)
