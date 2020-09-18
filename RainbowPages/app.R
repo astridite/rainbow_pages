@@ -115,46 +115,61 @@ server <- function(input, output) {
                   target = 'row', 
                   backgroundColor = styleEqual(c(1:8), hex))
   })
-  map_filtered <- reactive({
+  
+  mapFiltered <- reactive({
     
-    map <- leaflet() %>% 
-      addTiles() %>%
-      #addProviderTiles(providers$Stamen.Watercolor) %>% 
-      setView(lng = 18.5, lat = -33.9, zoom = 10)
+    filtered_markers <- markers[markers$layer %in% input$category,]
     
-    marker_data <- markers %>%
-      filter(layer %in% input$category)
-    
-    rainbow_icons <- icons(
+    filtered_icons <- icons(
       iconUrl = case_when(
-        marker_data$layer == "Activism" ~ here("icons/community.png"),
-        marker_data$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
-        marker_data$layer == "Commerce" ~ here("icons/financial-services.png"),
-        marker_data$layer == "Entrepeneurship" ~ here("icons/professional.png"),
-        marker_data$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
-        marker_data$layer == "Film, Media & Photography" ~ here("icons/photography.png"),
-        marker_data$layer == "Hospitality & Tourism" ~ here("icons/restaurants.png"),
-        marker_data$layer == "Marketing & Social Media" ~ here("icons/mobile-phones.png"),
-        marker_data$layer == "Medical & Counselling" ~ here("icons/health-medical.png"),
-        marker_data$layer == "Networking" ~ here("icons/meetups.png"),
-        marker_data$layer == "Science & Technology" ~ here("icons/computers.png")
+        filtered_markers$layer == "Activism" ~ here("icons/community.png"),
+        filtered_markers$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
+        filtered_markers$layer == "Commerce" ~ here("icons/financial-services.png"),
+        filtered_markers$layer == "Entrepeneurship" ~ here("icons/professional.png"),
+        filtered_markers$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
+        filtered_markers$layer == "Film, Media & Photography" ~ here("icons/photography.png"),
+        filtered_markers$layer == "Hospitality & Tourism" ~ here("icons/restaurants.png"),
+        filtered_markers$layer == "Marketing & Social Media" ~ here("icons/mobile-phones.png"),
+        filtered_markers$layer == "Medical & Counselling" ~ here("icons/health-medical.png"),
+        filtered_markers$layer == "Networking" ~ here("icons/meetups.png"),
+        filtered_markers$layer == "Science & Technology" ~ here("icons/computers.png")
       ),
       iconWidth = 26.4, iconHeight = 35.2,
       iconAnchorX = 13.2, iconAnchorY = 35
     )
     
-    map <- map %>%
+    filtered_elements <- list(filtered_markers, filtered_icons)
+    
+    return(filtered_elements)
+    
+  })
+  
+  output$map <- renderLeaflet({
+    leaflet(data = markers) %>% 
+      addTiles() %>%
+      fitBounds(~min(lon), ~min(lat), ~max(lon), ~max(lat)) %>%
       addMarkers(
-        data = marker_data,
         lng = ~lon,
         lat = ~lat,
-        icon = rainbow_icons,
+        icon = mapFiltered()[[2]],
         popup = ~as.character(label),
         clusterOptions = markerClusterOptions()
       )
   })
   
-  output$map <- renderLeaflet({map_filtered()})
+  observe({
+        leafletProxy("map", data = mapFiltered()[[1]]) %>%
+          clearMarkers() %>%
+          clearMarkerClusters() %>%
+          addMarkers(
+            lng = ~lon,
+            lat = ~lat,
+            icon = mapFiltered()[[2]],
+            popup = ~as.character(label),
+            clusterOptions = markerClusterOptions()
+      )
+  })
+  
 }
 
 # Run the application 
