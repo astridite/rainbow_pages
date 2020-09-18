@@ -7,9 +7,11 @@ library(magrittr)
 library(leaflet)
 library(RCurl)
 library(stringr)
+library(here)
 source("data_manip.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
+markers <- read.csv(here("markers.csv"))
 
 ui <-  fluidPage(theme=shinytheme("yeti"),
   navbarPage("Rainbow Pages Cape Town",
@@ -21,8 +23,7 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                               tags$br(),
                               tags$h4(welcome_para1, align="justify"),
                               tags$br(),
-                              width = 8,
-                              offset = 3)
+                              width = 11)
                               ),
                             sidebarLayout(
                               sidebarPanel(
@@ -45,16 +46,36 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                             mainPanel(
                               (DT::dataTableOutput(outputId = "browse")))
                           ))),
-
-                 # tabPanel("Map", icon=icon("map-marked-alt"), 
-                 #          fluidPage(
-                 #            fluidRow(column(tags$img(src='www/banner.jpg'), width=12),
-                 #                     column(tags$h3(map_text1), width=12), 
-                 #                     column(tags$style(type = "text/css", "#map {height: calc(100vh - 80px) !important;}"),
-                 #                            leafletOutput("map"), width=12)))), 
-                 # tabPanel("Network", icon=icon("draw-polygon"),
-                 #          fluidPage(
-                 #            fluidRow(column(tags$h3(work_in_progress), width=12)))),
+             tabPanel("Map", icon=icon("map-marked-alt"),
+                      fluidRow(
+                        #column(tags$img(src='banner.jpg'), width=12),
+                               column(tags$h3(map_text1), width=12),
+                               tags$head(
+                               tags$style(HTML("
+                               #controls {
+                               background-color: white;
+                               padding: 0 20px 20px 20px;
+                                               opacity: 0.5};"))),
+                               leafletOutput("map", height = 800)),
+                      absolutePanel(id = "controls", fixed = TRUE,
+                                    draggable = TRUE, top = 100, left = "auto", right = 40, bottom = "auto",
+                                    width = 230, height = "auto",
+                                    style = "opacity: 0.8",
+                                    
+                                    checkboxGroupInput("category",
+                                                       h3("Layers"), 
+                                                       choiceNames = list("Arts & Entertainment",
+                                                                          "Health", 
+                                                                          "Fashion & Beauty",
+                                                                          "Information Technology"),
+                                                       choiceValues = list("Arts & Entertainment", 
+                                                                           "Health", 
+                                                                           "Fashion & Beauty",
+                                                                           "Information Technology"),
+                                                       selected = list("Arts & Entertainment",
+                                                                       "Health", 
+                                                                       "Fashion & Beauty",
+                                                                       "Information Technology")))),
              tabPanel("Sign-Up", icon=icon("user-plus"),
                       fluidPage(column(
                         tags$h3(signup_text1),
@@ -103,13 +124,42 @@ server <- function(input, output) {
                   target = 'row', 
                   backgroundColor = styleEqual(c(1:8), hex))
   })
-    # output$map <- renderLeaflet({
-    #     leaflet(data = markers) %>%
-    #     addTiles() %>%
-    #     setView(lng = 18.495678, lat = -33.939157, zoom = 12) %>%
-    #     addMarkers(lng = ~lon, lat = ~lat, popup = ~as.character(label), clusterOptions = markerClusterOptions())
-    #     })
+  map_filtered <- reactive({
     
+    map <- leaflet() %>% 
+      addTiles() %>%
+      #addProviderTiles(providers$Stamen.Watercolor) %>% 
+      setView(lng = 18.5, lat = -33.9, zoom = 10)
+    
+    marker_data <- markers %>%
+      filter(layer %in% input$category)
+    
+    rainbow_icons <- icons(
+      iconUrl = case_when(
+        marker_data$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
+        marker_data$layer == "Community" ~ here("icons/community.png"),
+        marker_data$layer == "Information Technology" ~ here("icons/computers.png"),
+        marker_data$layer == "Food" ~ here("icons/food.png"),
+        marker_data$layer == "Health" ~ here("icons/health-medical.png"),
+        marker_data$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
+        marker_data$layer == "Financial Services" ~ here("icons/finance.png")
+      ),
+      iconWidth = 26.4, iconHeight = 35.2,
+      iconAnchorX = 13.2, iconAnchorY = 35
+    )
+    
+    map <- map %>%
+      addMarkers(
+        data = marker_data,
+        lng = ~lon,
+        lat = ~lat,
+        icon = rainbow_icons,
+        popup = ~as.character(label),
+        clusterOptions = markerClusterOptions()
+      )
+  })
+  
+  output$map <- renderLeaflet({map_filtered()})
 }
 
 # Run the application 
