@@ -14,7 +14,10 @@ curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridit
 markers <- read.csv(here("markers.csv"))
 
 ui <-  fluidPage(theme=shinytheme("yeti"),
-  navbarPage("Rainbow Pages Cape Town",
+                 setBackgroundColor(
+                   color = c("ghostwhite", "pink"),
+                   gradient = "radial"),
+  navbarPage("Rainbow Pages Cape Town", 
              tabPanel("Browse",
                           icon=icon("heart"),
                           fluidPage(
@@ -107,6 +110,7 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
   tags$style(HTML("a {color: #eb34c0}"))
 )
 
+
 server <- function(input, output) {
   data <- reactive(
     curated_data %>% 
@@ -117,8 +121,21 @@ server <- function(input, output) {
   output$browse <- renderDataTable({
     datatable(data(),
               rownames = F,
+              colnames=c("Name", "Contact", "Detail", "Online Presence", "Email", "Website", "Class", "Address",
+                          "location", "Extra info", "layer", "sector", "colours", "business", "organisation", "individual"),
               options=list(
-              columnDefs = list(list(visible=FALSE, targets=c(1,5,6,8,9,11))),
+              columnDefs = list(list(visible=FALSE, targets=c(1, #contact_person
+                                                              5, #website
+                                                              6, #class
+                                                              8, #location
+                                                              9, #extra_info
+                                                              10, #layer
+                                                              11, #sector
+                                                              12, #colours
+                                                              13, #business
+                                                              14, #organisation
+                                                              15 #individual
+                                                              ))),
               paging=F)) %>% 
       formatStyle('colours', 
                   target = 'row', 

@@ -43,7 +43,7 @@ curated <- responses %>%
   mutate(layer = str_replace_all(layer, "Automotive|Transport","Automotive & Transport")) %>%
   select(id, contact_person, detail, online_presence, email, website,
          class, address, location, extra_info, layer,
-         sector,  colours, business, organisation)
+         sector,  colours, business, organisation, individual)
 
 # Only add marker locations where we have an actual address
 locations <- curated %>%
@@ -64,8 +64,8 @@ markers <- curated %>%
 
 
 
-write.csv(curated, "curated_data.csv", row.names = F)
-write.csv(markers, "markers.csv", row.names = F)
+#write.csv(curated, "curated_data.csv", row.names = F)
+#write.csv(markers, "markers.csv", row.names = F)
 
 
 hex <- c("#FF6663", "#FEB144", "#FDFD97", "#9EE09E", "#9EC1CF", "#995bc7", "#CC99C9", "#935218")
