@@ -8,7 +8,7 @@ library(leaflet)
 library(RCurl)
 library(stringr)
 library(here)
-source("data_manip.R")
+# source("data_manip.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
 markers <- read.csv(here("markers.csv"))
@@ -118,7 +118,9 @@ server <- function(input, output) {
   
   mapFiltered <- reactive({
     
-    filtered_markers <- markers[markers$layer %in% input$category,]
+    filtered_markers <- curated_data %>%
+      filter(!is.na(lon),
+             layer %in% input$category)
     
     filtered_icons <- icons(
       iconUrl = case_when(
@@ -145,7 +147,7 @@ server <- function(input, output) {
   })
   
   output$map <- renderLeaflet({
-    leaflet(data = markers) %>% 
+    leaflet(data = curated_data[!is.na(curated_data$lon),]) %>% 
       addTiles() %>%
       fitBounds(~min(lon), ~min(lat), ~max(lon), ~max(lat)) %>%
       addMarkers(
