@@ -64,18 +64,9 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                                     
                                     checkboxGroupInput("category",
                                                        h3("Layers"), 
-                                                       choiceNames = list("Arts & Entertainment",
-                                                                          "Health", 
-                                                                          "Fashion & Beauty",
-                                                                          "Information Technology"),
-                                                       choiceValues = list("Arts & Entertainment", 
-                                                                           "Health", 
-                                                                           "Fashion & Beauty",
-                                                                           "Information Technology"),
-                                                       selected = list("Arts & Entertainment",
-                                                                       "Health", 
-                                                                       "Fashion & Beauty",
-                                                                       "Information Technology")))),
+                                                       choiceNames = levels(curated_data$layer),
+                                                       choiceValues = levels(curated_data$layer),
+                                                       selected = levels(curated_data$layer)))),
              tabPanel("Sign-Up", icon=icon("user-plus"),
                       fluidPage(column(
                         tags$h3(signup_text1),
@@ -136,13 +127,17 @@ server <- function(input, output) {
     
     rainbow_icons <- icons(
       iconUrl = case_when(
+        marker_data$layer == "Activism" ~ here("icons/community.png"),
         marker_data$layer == "Arts & Entertainment" ~ here("icons/nightlife.png"),
-        marker_data$layer == "Community" ~ here("icons/community.png"),
-        marker_data$layer == "Information Technology" ~ here("icons/computers.png"),
-        marker_data$layer == "Food" ~ here("icons/food.png"),
-        marker_data$layer == "Health" ~ here("icons/health-medical.png"),
+        marker_data$layer == "Commerce" ~ here("icons/financial-services.png"),
+        marker_data$layer == "Entrepeneurship" ~ here("icons/professional.png"),
         marker_data$layer == "Fashion & Beauty" ~ here("icons/fashion.png"),
-        marker_data$layer == "Financial Services" ~ here("icons/finance.png")
+        marker_data$layer == "Film, Media & Photography" ~ here("icons/photography.png"),
+        marker_data$layer == "Hospitality & Tourism" ~ here("icons/restaurants.png"),
+        marker_data$layer == "Marketing & Social Media" ~ here("icons/mobile-phones.png"),
+        marker_data$layer == "Medical & Counselling" ~ here("icons/health-medical.png"),
+        marker_data$layer == "Networking" ~ here("icons/meetups.png"),
+        marker_data$layer == "Science & Technology" ~ here("icons/computers.png")
       ),
       iconWidth = 26.4, iconHeight = 35.2,
       iconAnchorX = 13.2, iconAnchorY = 35
