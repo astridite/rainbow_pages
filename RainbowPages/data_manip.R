@@ -36,7 +36,7 @@ curated <- responses %>%
   mutate(layer = str_replace_all(layer, "Film & Media|Photography", "Film, Media & Photography")) %>% 
   mutate(layer = str_replace_all(layer, "Food and Drink|Hospitality|Tourism","Hospitality & Tourism")) %>% 
   mutate(layer = str_replace_all(layer, "Community|Activism & Social Services","Community & Activism")) %>% 
-  mutate(layer = str_replace_all(layer, "Medical|Counselling","Medical & Counselling")) %>%
+  mutate(layer = str_replace_all(layer, "Medical|Counsel(l?)ing","Medical & Counselling")) %>%
   mutate(layer = str_replace_all(layer, "Fashion|Beauty","Fashion & Beauty")) %>%
   mutate(layer = str_replace_all(layer, "Marketing|Social Media","Marketing & Social Media")) %>%
   mutate(layer = str_replace_all(layer, "Manufacturing|Engineering","Manufacturing & Engineering")) %>%
@@ -56,13 +56,16 @@ coords <- map_dfr(locations, geocode_OSM)
 # Create a dataframe of marker coordinates and labels
 markers <- curated %>%
   inner_join(coords, by = c('address' = 'query')) %>%
-  mutate(label = paste(sep = "<br/>",
+  mutate(entity = paste0(business, organisation),
+         label = paste(sep = "<br/>",
                        sprintf("<b>%s</b>", id),
-                       business, 
+                       entity, 
                        address)) %>%
-  select(lat, lon, label, layer)
+  select(id, lat, lon, label)
 
-
+# Add marker data to curated dataframe
+curated <- curated %>%
+  full_join(markers, by = 'id')
 
 #write.csv(curated, "curated_data.csv", row.names = F)
 #write.csv(markers, "markers.csv", row.names = F)
