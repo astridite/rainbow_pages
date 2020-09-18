@@ -8,7 +8,7 @@ library(leaflet)
 library(RCurl)
 library(stringr)
 library(here)
-# source("data_manip.R")
+source("data_manip.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
 markers <- read.csv(here("markers.csv"))
