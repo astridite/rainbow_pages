@@ -8,17 +8,16 @@ library(leaflet)
 library(RCurl)
 library(stringr)
 library(here)
-source("data_manip.R")
+#source("data_manip.R")
+source("app_text.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
-markers <- read.csv(here("markers.csv"))
+#markers <- read.csv(here("markers.csv"))
 
-ui <-  fluidPage(theme=shinytheme("yeti"),
-                 setBackgroundColor(
-                   color = c("ghostwhite", "pink"),
-                   gradient = "radial"),
-  navbarPage("Rainbow Pages Cape Town", 
-             tabPanel("Browse",
+ui <-  fluidPage(theme=shinytheme("simplex"),
+                 setBackgroundColor("#FFF7FA"),
+                 navbarPage("Rainbow Pages Cape Town",
+                            tabPanel("Browse",
                           icon=icon("heart"),
                           fluidPage(
                             fluidRow(column(
@@ -31,8 +30,8 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                             sidebarLayout(
                               sidebarPanel(
                                 tags$br(),
-                                style=HTML("background-color: #ffffff;", 
-                                           "border-color: #ffffff;",
+                                style=HTML("background-color: #FFF7FA;", 
+                                           "border-color: #FFF7FA;",
                                            "box-shadow: none;"),
                                 checkboxGroupInput('type', 
                                                    label=tags$h4("Filter by Type"),
@@ -45,6 +44,12 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                                             choices =levels(factor(curated_data$location)),
                                             inline = F,
                                             width = '100%'),
+                                checkboxGroupInput('layer', 
+                                                   label=tags$h4("Filter by Activity"),
+                                                   selected=levels(factor(curated_data$layer)),
+                                                   choices =levels(factor(curated_data$layer)),
+                                                   inline = F,
+                                                   width = '100%'),
                                 width=2),
                             mainPanel(
                               (DT::dataTableOutput(outputId = "browse")))
@@ -98,34 +103,27 @@ ui <-  fluidPage(theme=shinytheme("yeti"),
                             width=10, offset=1))
                  )),
   
-  tags$style(HTML("a {color: #eb34c0}"))
-)
+  tags$style(HTML("a {color: #eb34c0}")),
+  tags$style(type = 'text/css', '.navbar-default { background-color: #FFF7FA;
+                                                   color: #FFF7FA;}' )
+  )
 
 
 server <- function(input, output) {
   data <- reactive(
     curated_data %>% 
       dplyr::filter(class %in% input$type) %>% 
-      dplyr::filter(location %in% input$location) 
+      dplyr::filter(location %in% input$location) %>% 
+      dplyr::filter(layer %in% input$layer) %>% 
+      select(id, detail, email, online_presence, address, location, colours)
   )
           
   output$browse <- renderDataTable({
     datatable(data(),
               rownames = F,
-              colnames=c("Name", "Contact", "Detail", "Online Presence", "Email", "Website", "Class", "Address",
-                          "location", "Extra info", "layer", "sector", "colours", "business", "organisation", "individual"),
+              colnames=c("Name", "Detail", "Email", "Online Presence", "Address", "location", "colours"),
               options=list(
-              columnDefs = list(list(visible=FALSE, targets=c(1, #contact_person
-                                                              5, #website
-                                                              6, #class
-                                                              8, #location
-                                                              9, #extra_info
-                                                              10, #layer
-                                                              11, #sector
-                                                              12, #colours
-                                                              13, #business
-                                                              14, #organisation
-                                                              15 #individual
+              columnDefs = list(list(visible=FALSE, targets=c(6#colours
                                                               ))),
               paging=F)) %>% 
       formatStyle('colours', 

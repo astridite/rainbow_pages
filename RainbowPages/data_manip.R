@@ -67,8 +67,7 @@ markers <- curated %>%
 curated <- curated %>%
   full_join(markers, by = 'id')
 
-#write.csv(curated, "curated_data.csv", row.names = F)
-#write.csv(markers, "markers.csv", row.names = F)
+write.csv(curated, "curated_data.csv", row.names = F)
 
 
 
