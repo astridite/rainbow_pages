@@ -16,7 +16,8 @@ curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridit
 
 ui <-  fluidPage(theme=shinytheme("simplex"),
                  setBackgroundColor("#FFF7FA"),
-                 navbarPage("Rainbow Pages Cape Town",
+                 navbarPage(img(src="full_logo.png", height=28),
+                   #"Rainbow Pages Cape Town",
                             tabPanel("Browse",
                           icon=icon("heart"),
                           fluidPage(
@@ -80,18 +81,18 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                         tags$h3(signup_text1),
                         tags$h5(signup_text2),
                         tags$br(),
-                        tags$iframe(src="https://docs.google.com/forms/d/e/1FAIpQLSfp7dzCI7Pjh5H8RMEWvfh4_ba2ZbNoFSLfyuJlU6v4W4-nxg/viewform?usp=sf_link", width=1000, height=500),
-                        width=10, offset=1))
+                        tags$iframe(src="https://docs.google.com/forms/d/e/1FAIpQLSfp7dzCI7Pjh5H8RMEWvfh4_ba2ZbNoFSLfyuJlU6v4W4-nxg/viewform?usp=sf_link", width=700, height=500),
+                        width=8, offset=2))
                       ), 
              
              tabPanel("Resources", icon=icon("info-circle"), 
                           fluidPage(
                             fluidRow(column(tags$h3(resources_text1,
                                                     tags$a(href="https://www.sahistory.org.za/archive/life-orientation-classroom-sexuality-and-gender-pack?fbclid=IwAR3Thjx83Q4y4ntDa-78zPp-SFHuXKf_4uoMY55c1cLTRrwgp5DfYq36jUs",
-                                                           "Check out this comprehensive Gender and Sexuality Pack.")), width=8),
+                                                           "Check out this comprehensive Gender and Sexuality Pack.")), width=7, offset=1),
                                     column(tags$h3(resources_text2,
                                                     tags$a(href="https://github.com/astridite/rainbow_pages",
-                                                           "Check out our Github Repo."), align='right'), width=8, offset=4)))),
+                                                           "Check out our Github Repo."), align='right'), width=7, offset=4)))),
                  # tabPanel("Support", icon=icon("hand-holding-usd"),
                  #          fluidPage(
                  #            fluidRow(column(tags$h3(work_in_progress), width=12)))),
@@ -99,13 +100,16 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                           fluidPage(column(
                             tags$h3(suggestion_text1),
                             tags$br(),
-                            tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=1000, height=500),
-                            width=10, offset=1))
+                            tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=700, height=500),
+                            width=8, offset=2))
                  )),
   
   tags$style(HTML("a {color: #eb34c0}")),
   tags$style(type = 'text/css', '.navbar-default { background-color: #FFF7FA;
-                                                   color: #FFF7FA;}' )
+                                                   color: #FFF7FA;}',
+             '.navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+             color: #000000 ! important
+             }')
   )
 
 
