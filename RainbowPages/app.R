@@ -8,7 +8,6 @@ library(leaflet)
 library(RCurl)
 library(stringr)
 library(here)
-#source("data_manip.R")
 source("app_text.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
@@ -31,8 +30,8 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                             sidebarLayout(
                               sidebarPanel(
                                 tags$br(),
-                                style=HTML("background-color: #FFF7FA;", 
-                                           "border-color: #FFF7FA;",
+                                style=HTML("background-color:  rgba(0, 0, 0, 0);", 
+                                           "border-color:  rgba(0, 0, 0, 0);",
                                            "box-shadow: none;"),
                                 checkboxGroupInput('type', 
                                                    label=tags$h4("Filter by Type"),
@@ -57,25 +56,27 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                           ))),
              tabPanel("Map", icon=icon("map-marked-alt"),
                       fluidRow(
-                        #column(tags$img(src='banner.jpg'), width=12),
-                               column(tags$h3(map_text1), width=12),
+                               tags$br(),
+                               #column(tags$h3(map_text1), width=12),
                                tags$head(
                                tags$style(HTML("
                                #controls {
                                background-color: white;
                                padding: 0 20px 20px 20px;
                                                opacity: 0.5};"))),
-                               leafletOutput("map", height = 800)),
-                      absolutePanel(id = "controls", fixed = TRUE,
-                                    draggable = TRUE, top = 100, left = "auto", right = 40, bottom = "auto",
-                                    width = 230, height = "auto",
-                                    style = "opacity: 0.8",
-                                    
-                                    checkboxGroupInput("category",
-                                                       h3("Layers"), 
-                                                       choiceNames = levels(curated_data$layer),
-                                                       choiceValues = levels(curated_data$layer),
-                                                       selected = levels(curated_data$layer)))),
+                               column(absolutePanel(id = "controls", fixed = TRUE,
+                                                    draggable = TRUE, top = 100, left = "auto", right = "auto", bottom = "auto",
+                                                    width = 230, height = "auto",
+                                                    style = "opacity: 0.8",
+                                                    
+                                                    checkboxGroupInput("category",
+                                                                       h2("Explore LGBTQIA+ Activities in Cape Town:"), 
+                                                                       choiceNames = levels(factor(curated_data$layer)),
+                                                                       choiceValues = levels(factor(curated_data$layer)),
+                                                                       selected = levels(factor(curated_data$layer)))), width=4),
+                               column(leafletOutput("map", height = 480, width=800), width=9, offset=3),
+                               
+                      )),
              tabPanel("Sign-Up", icon=icon("user-plus"),
                       fluidPage(column(
                         tags$h3(signup_text1),
@@ -89,10 +90,14 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                           fluidPage(
                             fluidRow(column(tags$h3(resources_text1,
                                                     tags$a(href="https://www.sahistory.org.za/archive/life-orientation-classroom-sexuality-and-gender-pack?fbclid=IwAR3Thjx83Q4y4ntDa-78zPp-SFHuXKf_4uoMY55c1cLTRrwgp5DfYq36jUs",
-                                                           "Check out this comprehensive Gender and Sexuality Pack.")), width=7, offset=1),
+                                                           "Check out this comprehensive Gender and Sexuality Pack.")), width=8, offset=1),
                                     column(tags$h3(resources_text2,
                                                     tags$a(href="https://github.com/astridite/rainbow_pages",
-                                                           "Check out our Github Repo."), align='right'), width=7, offset=4)))),
+                                                           "Check out our Github Repo."), align='right'), width=8, offset=4))),
+                                    column(tags$h3(resources_text3, tags$a(href="mailto:rainbowpagesct@gmail.com","get in touch!")), width=8, offset=1),
+                                    column(tags$br(),tags$br(), tags$br(), width=12),
+                      
+                                    column(img(src="lettermark.png", height=200), width=4, offset=1)),
                  # tabPanel("Support", icon=icon("hand-holding-usd"),
                  #          fluidPage(
                  #            fluidRow(column(tags$h3(work_in_progress), width=12)))),
@@ -103,13 +108,12 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                             tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=700, height=500),
                             width=8, offset=2))
                  )),
-  
+             
+  setBackgroundImage(src="rp_background.png"),
   tags$style(HTML("a {color: #eb34c0}")),
-  tags$style(type = 'text/css', '.navbar-default { background-color: #FFF7FA;
-                                                   color: #FFF7FA;}',
-             '.navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
-             color: #000000 ! important
-             }')
+  tags$style(type = 'text/css', '.navbar-default { background-color: rgba(0, 0, 0, 0);
+                                                   color: rgba(0, 0, 0, 0);}'),
+  tags$style(type = 'text/css',"navbar navbar-default navbar-static-top {color: rgba(0, 0, 0, 0);}")
   )
 
 
@@ -119,20 +123,20 @@ server <- function(input, output) {
       dplyr::filter(class %in% input$type) %>% 
       dplyr::filter(location %in% input$location) %>% 
       dplyr::filter(layer %in% input$layer) %>% 
-      select(id, detail, email, online_presence, address, location, colours)
+      select(id, detail, email, online_presence, location, sector, colours)
   )
           
   output$browse <- renderDataTable({
     datatable(data(),
               rownames = F,
-              colnames=c("Name", "Detail", "Email", "Online Presence", "Address", "location", "colours"),
+              colnames=c("Name", "Detail", "Email", "Online Presence", "Location", "Sector", "colours"),
               options=list(
               columnDefs = list(list(visible=FALSE, targets=c(6#colours
                                                               ))),
               paging=F)) %>% 
       formatStyle('colours', 
                   target = 'row', 
-                  backgroundColor = styleEqual(c(1:8), hex))
+                  backgroundColor = styleEqual(c(1:8), rgb_cols))
   })
   
   mapFiltered <- reactive({
@@ -195,3 +199,4 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
