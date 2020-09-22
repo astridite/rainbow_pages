@@ -15,7 +15,9 @@ curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridit
 
 ui <-  fluidPage(theme=shinytheme("simplex"),
                  setBackgroundColor("#FFF7FA"),
-                 navbarPage(img(src="full_logo.png", height=28),
+                 # title is not a string, so set windowTitle explicitly
+                 navbarPage(windowTitle="Rainbow Pages Cape Town",
+                            title=img(src="full_logo.png", height=28),
                             tabPanel("Browse",
                                      icon=icon("heart"),
                                      fluidPage(
