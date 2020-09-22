@@ -10,7 +10,7 @@ library(stringr)
 library(here)
 source("app_text.R")
 
-curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
+curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/master/RainbowPages/curated_data.csv")) 
 
 
 ui <-  fluidPage(theme=shinytheme("simplex"),
