@@ -56,7 +56,9 @@ coords <- map_dfr(locations, geocode_OSM)
 # Create a dataframe of marker coordinates and labels
 markers <- curated %>%
   inner_join(coords, by = c('address' = 'query')) %>%
-  mutate(entity = paste0(business, organisation),
+  mutate(business = ifelse(is.na(business), "", business),
+         organisation = ifelse(is.na(organisation), "", organisation),
+         entity = paste0(business, organisation),
          label = paste(sep = "<br/>",
                        sprintf("<b>%s</b>", id),
                        entity, 
