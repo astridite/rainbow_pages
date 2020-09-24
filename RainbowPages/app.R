@@ -56,7 +56,8 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                            (DT::dataTableOutput(outputId = "browse")))
                                          ))),
                             tabPanel("Map", icon=icon("map-marked-alt"),
-                                     fluidRow(
+                                     fluidPage(
+                                       fluidRow(
                                        tags$br(),
                                        #column(tags$h3(map_text1), width=12),
                                        tags$head(
@@ -75,7 +76,7 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                                                                choiceValues = levels(factor(curated_data$layer)),
                                                                                selected = levels(factor(curated_data$layer)))), width=4),
                                        column(leafletOutput("map", height = 480, width=800), width=9, offset=3)
-                                       )),
+                                       ))),
                             tabPanel("Sign-Up", icon=icon("user-plus"),
                                      fluidPage(column(
                                        tags$h3(signup_text1),
