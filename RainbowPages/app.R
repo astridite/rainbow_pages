@@ -11,28 +11,24 @@ library(here)
 source("app_text.R")
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
 
-
 ui <-  fluidPage(theme=shinytheme("simplex"),
-                 setBackgroundColor("#FFF7FA"),
+                 tags$head(tags$link(rel="shortcut icon", href="favicon.ico")),
                  # title is not a string, so set windowTitle explicitly
                  navbarPage(windowTitle="Rainbow Pages Cape Town",
-                            title=img(src="full_logo.png", height=28),
+                            title=img(src="full_logo.png"),
                             tabPanel("Browse",
                                      icon=icon("heart"),
                                      fluidPage(
                                        fluidRow(column(
                                          tags$h2(welcome_text), 
                                          tags$br(),
-                                         tags$h4(welcome_para1, align="justify"),
+                                         tags$h4(welcome_para1, class="welcome-p"),
                                          tags$br(),
-                                         width = 11)
+                                         width = 12)
                                          ),
                                        sidebarLayout(
                                          sidebarPanel(
                                            tags$br(),
-                                           style=HTML("background-color:  rgba(0, 0, 0, 0);", 
-                                                      "border-color:  rgba(0, 0, 0, 0);",
-                                                      "box-shadow: none;"),
                                            checkboxGroupInput('type',
                                                               label=tags$h4("Filter by Type"),
                                                               selected=levels(factor(curated_data$class)),
@@ -60,17 +56,11 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                        tags$br(),
                                        #column(tags$h3(map_text1), width=12),
                                        tags$head(
-                                       tags$style(HTML("
-                                       #controls {
-                                       background-color: white;
-                                       padding: 0 20px 20px 20px;
-                                                       opacity: 0.5};"))),
+                                         tags$link(rel = "stylesheet", type = "text/css", href = "rainbow.css")),
                                        column(absolutePanel(id = "controls", fixed = TRUE,
-                                                            draggable = TRUE, top = 100, left = "auto", right = "auto", bottom = "auto",
-                                                            width = 230, height = "auto",
-                                                            style = "opacity: 0.8",
+                                                            draggable = TRUE,
                                                             checkboxGroupInput("category",
-                                                                               h4("Explore LGBTQIA+ Activities in Cape Town:"), 
+                                                                               h4("Explore LGBTQIA+ Activities in Cape Town:",), 
                                                                                choiceNames = levels(factor(curated_data$layer)),
                                                                                choiceValues = levels(factor(curated_data$layer)),
                                                                                selected = levels(factor(curated_data$layer)))), width=4),
@@ -92,7 +82,7 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                        tags$h3(suggestion_text1),
                                        tags$h5(suggestion_text2),
                                        tags$br(),
-                                       tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=700, height=400),
+                                       tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link"),
                                        width=9, offset=2))
                                      ),
                             tabPanel("About", icon=icon("info-circle"),
