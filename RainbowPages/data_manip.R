@@ -33,7 +33,7 @@ curated <- responses %>%
   mutate(layer = sector) %>% 
   mutate(layer = str_replace_all(layer, "Science|Technology", "Science & Technology")) %>% 
   mutate(layer = str_replace_all(layer, "Arts|Performing Arts|Entertainment", "Arts & Entertainment")) %>% 
-  mutate(layer = str_replace_all(layer, "Film & Media|Photography", "Film, Media & Photography")) %>% 
+  mutate(layer = str_replace_all(layer, "Film and Media|Photography", "Film, Media & Photography")) %>% 
   mutate(layer = str_replace_all(layer, "Food and Drink|Hospitality|Tourism","Hospitality & Tourism")) %>% 
   mutate(layer = str_replace_all(layer, "Community|Activism & Social Services","Community & Activism")) %>% 
   mutate(layer = str_replace_all(layer, "Medical|Counsel(l?)ing","Medical & Counselling")) %>%
