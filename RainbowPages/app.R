@@ -57,18 +57,11 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                        tags$br(),
                                        #column(tags$h3(map_text1), width=12),
                                        tags$head(
-                                         tags$link(rel = "stylesheet", type = "text/css", href = "rainbow.css"),
-                                       tags$style(HTML("
-                                       #controls {
-                                       background-color: white;
-                                       padding: 0 20px 20px 20px;
-                                                       opacity: 0.5};"))),
+                                         tags$link(rel = "stylesheet", type = "text/css", href = "rainbow.css")),
                                        column(absolutePanel(id = "controls", fixed = TRUE,
-                                                            draggable = TRUE, top = 100, left = "auto", right = "auto", bottom = "auto",
-                                                            width = 230, height = "auto",
-                                                            style = "opacity: 0.8",
+                                                            draggable = TRUE,
                                                             checkboxGroupInput("category",
-                                                                               h4("Explore LGBTQIA+ Activities in Cape Town:"), 
+                                                                               h4("Explore LGBTQIA+ Activities in Cape Town:",), 
                                                                                choiceNames = levels(factor(curated_data$layer)),
                                                                                choiceValues = levels(factor(curated_data$layer)),
                                                                                selected = levels(factor(curated_data$layer)))), width=4),
@@ -90,7 +83,7 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                        tags$h3(suggestion_text1),
                                        tags$h5(suggestion_text2),
                                        tags$br(),
-                                       tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link", width=700, height=400),
+                                       tags$iframe(src=" https://docs.google.com/forms/d/e/1FAIpQLScNatTIO3l8PZNQK5QdrNlWuxHhCjfP7etHYt3HEo9rn97ztw/viewform?usp=sf_link"),
                                        width=9, offset=2))
                                      ),
                             tabPanel("About", icon=icon("info-circle"),
