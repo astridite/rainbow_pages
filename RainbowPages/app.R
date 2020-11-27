@@ -9,8 +9,7 @@ library(RCurl)
 library(stringr)
 library(here)
 source("app_text.R")
-curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/master/RainbowPages/curated_data.csv")) %>% 
-  mutate(email_url=paste0("<a href=", '"', "mailto:", email,'"', '><i class="fas fa-envelope"></i></a>'))
+curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/dev/RainbowPages/curated_data.csv")) 
 
 
 ui <-  fluidPage(theme=shinytheme("simplex"),
@@ -107,7 +106,8 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                                 column(tags$h3(about_text3, tags$a(href="mailto:rainbowpagesct@gmail.com","get in touch!")), width=8, offset=1),
                                                 column(tags$br(),tags$br(), tags$br(), width=12)),
                                        fluidRow(column(img(src="lettermark.png", height=200), width=3, offset=1), 
-                                                column(tags$h3(about_text4, tags$a(href="https://twitter.com/dataccino", "Astrid Radermacher"), "and", 
+                                                column(tags$h3(about_text4, tags$a(href="https://twitter.com/dataccino", "Astrid Radermacher"), ",", 
+                                                               tags$a(href="https://twitter.com/Axiematic", "Emma Collier"), "and",
                                                                tags$a(href="https://twitter.com/mattdenni", "Matt Dennis"), align='right'), 
                                                        tags$h3(about_text5, tags$a(href="https://www.behance.net/liamlr95", "Liam Le Roux"), align='right'),
                                                        width=6, offset=2))))
@@ -126,16 +126,16 @@ server <- function(input, output) {
       dplyr::filter(class %in% input$type) %>% 
       dplyr::filter(location %in% input$location) %>% 
       dplyr::filter(layer %in% input$layer) %>% 
-      select(id, detail, email_url, online_presence, location, sector, colours)
+      select(id, detail, op_icons, location, sector, colours)
   )
           
   output$browse <- DT::renderDataTable({
     datatable(data(),
               escape=F,
               rownames = F,
-              colnames=c("Name", "Detail", "Email","Online Presence", "Location", "Sector", "colours"),
+              colnames=c("Name", "Detail", "Email", "Location", "Sector", "colours"),
               options=list(
-              columnDefs = list(list(visible=FALSE, targets=c(6#colours
+              columnDefs = list(list(visible=FALSE, targets=c(5#colours
                                                               ))),
               paging=F)) %>% 
       formatStyle('colours', 

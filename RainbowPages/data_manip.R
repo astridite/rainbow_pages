@@ -12,11 +12,21 @@ curated <- responses %>%
          address, location, extra_info, sector, twitter, instagram, facebook, linkedin) %>% 
   arrange(id) %>% 
   rowwise() %>% 
-  mutate(online_presence = paste(ifelse(is.na(facebook), "", paste("Facebook: ", facebook, " ")),
+  mutate(instagram=str_replace(instagram, "@", "https://www.instagram.com/"),
+         facebook=str_c("https://www.facebook.com/", facebook),
+         twitter=str_replace(twitter,'@', 'https://twitter.com/'),
+         linkedin=str_c("https://www.linkedin.com/in/", linkedin)) %>% 
+  mutate(online_presence = paste(ifelse(is.na(facebook), "", paste("Facebook:", facebook, ", ")),
                                  ifelse(is.na(instagram), "", paste("Instagram: ", instagram, " ")),
                                  ifelse(is.na(twitter), "", paste("Twitter: ", twitter, " ")),
                                  ifelse(is.na(linkedin), "", paste("Linkedin: ", linkedin, " ")),
                                  ifelse(is.na(website), "", paste("Website: ", website, " ")))) %>% 
+  mutate(op_icons = paste(ifelse(is.na(facebook), "", paste0('<a href="', facebook, '"<i class="fab fa-facebook"></i></a>')),
+                                 ifelse(is.na(instagram), "", paste0('<a href="', instagram, '"<i class="fab fa-instagram-square"></i></a>')),
+                                 ifelse(is.na(twitter), "", paste0('<a href="', twitter, '"<i class="fab fa-twitter"></i></a>')),
+                                 ifelse(is.na(linkedin), "",paste0('<a href="', linkedin, '"<i class="fab fa-linkedin"></i></a>')),
+                                 ifelse(is.na(website), "", paste0('<a href="', website, '"<i class="fas fa-globe"></i></a>')),
+                                 ifelse(is.na(email), "", paste0('<a href="mailto:', email, '"><i class="fas fa-envelope"></i></a>')))) %>% 
   rowwise() %>% 
   mutate(detail = ifelse(class=="An individual", individual, 
                          ifelse(class=="A business", business, 
@@ -41,7 +51,7 @@ curated <- responses %>%
   mutate(layer = str_replace_all(layer, "Marketing|Social Media","Marketing & Social Media")) %>%
   mutate(layer = str_replace_all(layer, "Manufacturing|Engineering","Manufacturing & Engineering")) %>%
   mutate(layer = str_replace_all(layer, "Automotive|Transport","Automotive & Transport")) %>%
-  select(id, contact_person, detail, online_presence, email, website,
+  select(id, contact_person, detail, online_presence, op_icons, email, website,
          class, address, location, extra_info, layer,
          sector,  colours, business, organisation, individual)
 
