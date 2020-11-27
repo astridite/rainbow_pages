@@ -10,7 +10,7 @@ library(stringr)
 library(here)
 source("app_text.R")
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/master/RainbowPages/curated_data.csv")) %>% 
-  mutate(url=paste0("<a href=", '"', "mailto:", email,'"', ">boop</a>"))
+  mutate(email_url=paste0("<a href=", '"', "mailto:", email,'"', '><i class="fas fa-envelope"></i></a>'))
 
 
 ui <-  fluidPage(theme=shinytheme("simplex"),
@@ -126,16 +126,16 @@ server <- function(input, output) {
       dplyr::filter(class %in% input$type) %>% 
       dplyr::filter(location %in% input$location) %>% 
       dplyr::filter(layer %in% input$layer) %>% 
-      select(id, detail, email, url, online_presence, location, sector, colours)
+      select(id, detail, email_url, online_presence, location, sector, colours)
   )
           
   output$browse <- DT::renderDataTable({
     datatable(data(),
               escape=F,
               rownames = F,
-              colnames=c("Name", "Detail", "Email", "Email URL","Online Presence", "Location", "Sector", "colours"),
+              colnames=c("Name", "Detail", "Email","Online Presence", "Location", "Sector", "colours"),
               options=list(
-              columnDefs = list(list(visible=FALSE, targets=c(7#colours
+              columnDefs = list(list(visible=FALSE, targets=c(6#colours
                                                               ))),
               paging=F)) %>% 
       formatStyle('colours', 
