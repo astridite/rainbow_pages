@@ -1,0 +1,17 @@
+.welcome-p {
+  text-align: justify;
+}
+
+body {
+  background-color: #FFF7FA!important;
+}
+
+.navbar-brand>img {
+    height: 28px;
+}
+
+.well {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    box-shadow: none;
+}

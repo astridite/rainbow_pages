@@ -12,28 +12,24 @@ source("app_text.R")
 
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/master/RainbowPages/curated_data.csv")) 
 
-
 ui <-  fluidPage(theme=shinytheme("simplex"),
-                 setBackgroundColor("#FFF7FA"),
+                 tags$head(tags$link(rel="shortcut icon", href="favicon.ico")),
                  # title is not a string, so set windowTitle explicitly
                  navbarPage(windowTitle="Rainbow Pages Cape Town",
-                            title=img(src="full_logo.png", height=28),
+                            title=img(src="full_logo.png"),
                             tabPanel("Browse",
                                      icon=icon("heart"),
                                      fluidPage(
                                        fluidRow(column(
                                          tags$h2(welcome_text), 
                                          tags$br(),
-                                         tags$h4(welcome_para1, align="justify"),
+                                         tags$h4(welcome_para1, class="welcome-p"),
                                          tags$br(),
-                                         width = 11)
+                                         width = 12)
                                          ),
                                        sidebarLayout(
                                          sidebarPanel(
                                            tags$br(),
-                                           style=HTML("background-color:  rgba(0, 0, 0, 0);", 
-                                                      "border-color:  rgba(0, 0, 0, 0);",
-                                                      "box-shadow: none;"),
                                            checkboxGroupInput('type',
                                                               label=tags$h4("Filter by Type"),
                                                               selected=levels(factor(curated_data$class)),
@@ -61,6 +57,7 @@ ui <-  fluidPage(theme=shinytheme("simplex"),
                                        tags$br(),
                                        #column(tags$h3(map_text1), width=12),
                                        tags$head(
+                                         tags$link(rel = "stylesheet", type = "text/css", href = "rainbow.css"),
                                        tags$style(HTML("
                                        #controls {
                                        background-color: white;
