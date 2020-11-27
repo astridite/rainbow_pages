@@ -9,7 +9,6 @@ library(RCurl)
 library(stringr)
 library(here)
 source("app_text.R")
-
 curated_data <- read.csv(text=getURL("https://raw.githubusercontent.com/astridite/rainbow_pages/master/RainbowPages/curated_data.csv")) 
 
 
